@@ -1,7 +1,7 @@
 import { Button, Input, Select } from '@chakra-ui/react';
 import React from 'react';
 import Board from './Board';
-import './ContainerStyle.css';
+// import './ContainerStyle.css';
 
 type ContainerState = {
   penColor: string;
@@ -41,12 +41,23 @@ class WhiteBoardContainer extends React.Component<Record<string, any>, Container
         <div className='tools-bar'>
           <div className='color-picker-container'>
             Pen Color: &nbsp;
-            <Input size='xs' type='color' value={penColor} onChange={(e) => { this.setState({ penColor: e.target.value }) }} />
+            <Input
+              size='xs'
+              type='color'
+              value={penColor}
+              onChange={e => {
+                this.setState({ penColor: e.target.value });
+              }}
+            />
           </div>
           <div className='brushsize-container'>
             Brush Size: &nbsp;
-            <Select size='xs' value={penSize} onChange={(e) => { this.setState({ penSize: parseInt(e.target.value, 10) }) }}>
-
+            <Select
+              size='xs'
+              value={penSize}
+              onChange={e => {
+                this.setState({ penSize: parseInt(e.target.value, 10) });
+              }}>
               <option value='1'>1</option>
               <option value='5'>5</option>
               <option value='10'>10</option>
@@ -64,8 +75,8 @@ class WhiteBoardContainer extends React.Component<Record<string, any>, Container
         </div>
         <div className='board-container'>
           <Board penColor={penColor} penSize={penSize} socket={mySocket} />
-        </div >
-      </div >
+        </div>
+      </div>
     );
   }
 }

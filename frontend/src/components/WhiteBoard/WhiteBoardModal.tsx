@@ -1,7 +1,7 @@
 import { Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import React from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
-import './ContainerStyle.css';
+// import './ContainerStyle.css';
 import WhiteBoardContainer from './WhiteBoardContainer';
 // type WhiteBoardModalState = {
 //   penColor: string;

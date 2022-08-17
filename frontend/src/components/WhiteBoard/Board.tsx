@@ -1,25 +1,23 @@
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react';
 import React from 'react';
-import { Socket, io } from 'socket.io-client';
-import useCoveyAppState from '../../hooks/useCoveyAppState';
-import './BoardStyle.css';
-
-
+import { Socket } from 'socket.io-client';
+// import * as css from './BoardStyle.css';
 
 type BoardProps = {
   penSize: number;
   penColor: string;
-  socket: any
+  socket: any;
 };
 // type BoardStates = {};
 class Board extends React.Component<BoardProps, Record<string, any>> {
-  timeout: NodeJS.Timeout;
+  // timeout: NodeJS.Timeout;
+  timeout: ReturnType<typeof setTimeout>;
 
   private canvas: HTMLCanvasElement;
 
   isDrawing = false;
 
-  private _socket: Socket;
+  private socketProj: Socket;
 
   ctx: CanvasRenderingContext2D;
 
@@ -29,7 +27,7 @@ class Board extends React.Component<BoardProps, Record<string, any>> {
     const { socket } = this.props;
     // this._socket = io('http://localhost:3000');
 
-    this._socket = socket;
+    this.socketProj = socket;
     const initData = (data: string) => {
       //   const root: Board = this;
       const interval = setInterval(() => {
@@ -54,10 +52,8 @@ class Board extends React.Component<BoardProps, Record<string, any>> {
       return initData;
     };
 
-    this._socket.on('canvas-data', (data: any) => initData(data));
-
+    this.socketProj.on('canvas-data', (data: any) => initData(data));
   }
-
 
   componentDidMount() {
     this.drawOnCanvas();
@@ -73,10 +69,10 @@ class Board extends React.Component<BoardProps, Record<string, any>> {
   // const socket: Socket<ServerTo
 
   handleClearBoard() {
-    const canvas = document.getElementById("board") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const canvas = document.getElementById('board') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    ctx.fillStyle = "white";
+    ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
     if (this.timeout !== undefined) {
@@ -84,7 +80,7 @@ class Board extends React.Component<BoardProps, Record<string, any>> {
     }
     this.timeout = setTimeout(() => {
       const base64ImageData = canvas.toDataURL('image/png');
-      this._socket.emit('canvas-data', base64ImageData);
+      this.socketProj.emit('canvas-data', base64ImageData);
     }, 1000);
   }
 
@@ -113,7 +109,7 @@ class Board extends React.Component<BoardProps, Record<string, any>> {
       }
       this.timeout = setTimeout(() => {
         const base64ImageData = canvas.toDataURL('image/png');
-        this._socket.emit('canvas-data', base64ImageData);
+        this.socketProj.emit('canvas-data', base64ImageData);
       }, 1000);
     };
 
@@ -149,7 +145,13 @@ class Board extends React.Component<BoardProps, Record<string, any>> {
   render() {
     return (
       <div className='sketch' id='sketch'>
-        <Button className='clear-btn' colorScheme='red' size='sm' onClick={() => this.handleClearBoard()}>Clear</Button>
+        <Button
+          className='clear-btn'
+          colorScheme='red'
+          size='sm'
+          onClick={() => this.handleClearBoard()}>
+          Clear
+        </Button>
         <canvas className='board' id='board' />
       </div>
     );
